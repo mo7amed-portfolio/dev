@@ -236,12 +236,13 @@
             overflow: hidden;
         }
         .hero-text-col {
+            order: 2;
             flex: 1 1 480px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             text-align: right;
-            padding: 20px 16px 50px min(6vw, 64px);
+            padding: 20px min(6vw, 64px) 50px 16px;
             min-width: 0;
         }
         .eyebrow {
@@ -268,12 +269,13 @@
 
         /* ===== HERO IMAGE (full-bleed, right edge, no frame) ===== */
         .hero-image-col {
+            order: 1;
             position: relative;
             flex: 0 1 46%;
             align-self: stretch;
             display: flex;
             align-items: flex-end;
-            justify-content: flex-end;
+            justify-content: flex-start;
             min-width: 280px;
             overflow: visible;
         }
@@ -284,7 +286,7 @@
             height: 100%;
             display: flex;
             align-items: flex-end;
-            justify-content: flex-end;
+            justify-content: flex-start;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
@@ -426,6 +428,7 @@
                 padding-top: 90px;
             }
             .hero-text-col {
+                order: 2;
                 align-items: center;
                 text-align: center;
                 padding: 10px 16px 40px;
@@ -435,6 +438,7 @@
                 justify-content: center;
             }
             .hero-image-col {
+                order: 1;
                 flex: 0 0 auto;
                 width: 100%;
                 min-width: 0;
