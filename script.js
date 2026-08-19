@@ -1,35 +1,32 @@
 // =================================================================
-        //  OFFERS DATA (updated prices with discounts)
+        //  OFFERS DATA
         // =================================================================
         const offersData = [{
             id: 1,
-            name: { ar: 'موقع صغير', en: 'Small Site' },
-            price: 1200,
-            discountPrice: 1000,
+            name: { ar: 'متجر إلكتروني', en: 'E-commerce Store' },
+            priceLabel: { ar: '5000 جنيه / 100 دولار', en: '$100 / 5000 EGP' },
             badge: null,
             feats: {
-                ar: ['صفحة واحدة بتصميم احترافي', 'تصميم متجاوب بالكامل', 'تسليم خلال 3 أيام', 'دعم فني أسبوع كامل'],
-                en: ['Single page professional design', 'Fully responsive design', 'Delivery within 3 days', '1 week technical support']
+                ar: ['متجر كامل بعربة شراء ونظام منتجات', 'تصميم متجاوب بالكامل', 'ربط وسائل الدفع والتواصل', 'دعم فني بعد التسليم'],
+                en: ['Full store with cart & product system', 'Fully responsive design', 'Payment & contact integration', 'Post-delivery technical support']
             }
         }, {
             id: 2,
-            name: { ar: 'موقع متوسط', en: 'Medium Site' },
-            price: 1700,
-            discountPrice: 1500,
+            name: { ar: 'منصة تعليمية', en: 'Educational Platform' },
+            priceLabel: { ar: '9000 جنيه / 180 دولار', en: '$180 / 9000 EGP' },
             badge: { ar: 'الأكثر طلبًا', en: 'Most Popular' },
             feats: {
-                ar: ['حتى 5 صفحات متكاملة', 'نماذج تواصل وربط سوشيال ميديا', 'تسليم خلال أسبوع', 'دعم فني لمدة شهر'],
-                en: ['Up to 5 full pages', 'Contact forms & social media integration', 'Delivery within 1 week', '1 month technical support']
+                ar: ['نظام كورسات ومحتوى تعليمي', 'حسابات مستخدمين وتسجيل دخول', 'لوحة تحكم لإدارة المحتوى', 'دعم فني بعد التسليم'],
+                en: ['Courses & educational content system', 'User accounts & login', 'Content management dashboard', 'Post-delivery technical support']
             }
         }, {
             id: 3,
-            name: { ar: 'موقع كبير', en: 'Large Site' },
-            price: 2500,
-            discountPrice: 2000,
+            name: { ar: 'موقع مختلف؟', en: 'Something Different?' },
+            priceLabel: { ar: 'السعر حسب الميزانية والطلبات', en: 'Price based on budget & requirements' },
             badge: null,
             feats: {
-                ar: ['صفحات غير محدودة + لوحة تحكم', 'نظام مستخدمين وتسجيل دخول', 'تسليم خلال أسبوعين', 'دعم فني 3 أشهر'],
-                en: ['Unlimited pages + dashboard', 'User system & login', 'Delivery within 2 weeks', '3 months technical support']
+                ar: ['فكرة أو مشروع مخصص لك', 'نتناقش في التفاصيل والميزانية', 'تصميم وتنفيذ حسب احتياجك', 'دعم فني بعد التسليم'],
+                en: ['A custom idea or project just for you', "We'll discuss the details & budget", 'Design & build tailored to your needs', 'Post-delivery technical support']
             }
         }];
 
@@ -49,8 +46,7 @@
                 const name = isAr ? o.name.ar : o.name.en;
                 const badge = o.badge ? (isAr ? o.badge.ar : o.badge.en) : null;
                 const feats = isAr ? o.feats.ar : o.feats.en;
-                const priceDisplay = o.discountPrice || o.price;
-                const oldPrice = o.price;
+                const priceLabel = isAr ? o.priceLabel.ar : o.priceLabel.en;
 
                 const el = document.createElement('div');
                 el.className = 'glass-card offer-card' + (badge ? ' featured' : '');
@@ -59,9 +55,7 @@
               ${badge ? `<span class="offer-badge">${badge}</span>` : ''}
               <div class="offer-name">${name}</div>
               <div class="offer-price-row">
-                <span class="offer-price">${priceDisplay} <span class="currency">${isAr ? 'ج.م' : 'EGP'}</span></span>
-                ${oldPrice > priceDisplay ? `<span class="offer-old-price">${oldPrice} ${isAr ? 'ج.م' : 'EGP'}</span>` : ''}
-                ${oldPrice > priceDisplay ? `<span class="offer-discount">${Math.round((1 - priceDisplay/oldPrice)*100)}% OFF</span>` : ''}
+                <span class="offer-price">${priceLabel}</span>
               </div>
               <ul class="offer-feats">
                 ${feats.map(f => `<li>${checkSvg}<span>${f}</span></li>`).join('')}
@@ -94,10 +88,9 @@
             currentOffer = offer;
             const isAr = currentLang === 'ar';
             const name = isAr ? offer.name.ar : offer.name.en;
-            const price = offer.discountPrice || offer.price;
-            const currency = isAr ? 'ج.م' : 'EGP';
+            const priceLabel = isAr ? offer.priceLabel.ar : offer.priceLabel.en;
             selectedBanner.innerHTML =
-                `${isAr ? 'الباقة المختارة' : 'Selected Package'}:<b>${name} — ${price} ${currency}</b>`;
+                `${isAr ? 'الباقة المختارة' : 'Selected Package'}:<b>${name} — ${priceLabel}</b>`;
             modal.style.display = 'flex';
             // Reset fields
             document.getElementById('custName').value = '';
@@ -122,8 +115,7 @@
 
             const isAr = currentLang === 'ar';
             const offerName = isAr ? currentOffer.name.ar : currentOffer.name.en;
-            const price = currentOffer.discountPrice || currentOffer.price;
-            const currency = isAr ? 'ج.م' : 'EGP';
+            const priceLabel = isAr ? currentOffer.priceLabel.ar : currentOffer.priceLabel.en;
 
             const msg = `${isAr ? 'طلب موقع جديد 🌐' : 'New Website Request 🌐'}
 
@@ -131,7 +123,7 @@
         ${isAr ? 'الهاتف' : 'Phone'}: ${phone}
         ${isAr ? 'البريد' : 'Email'}: ${email || (isAr ? 'لم يحدد' : 'Not specified')}
         ${isAr ? 'الباقة' : 'Package'}: ${offerName}
-        ${isAr ? 'السعر' : 'Price'}: ${price} ${currency}
+        ${isAr ? 'السعر' : 'Price'}: ${priceLabel}
 
         ${isAr ? 'تفاصيل إضافية' : 'Additional Details'}:
         ${details || (isAr ? 'لا توجد' : 'None')}
@@ -272,10 +264,9 @@
             if (currentOffer && modal.style.display === 'flex') {
                 const isAr = lang === 'ar';
                 const name = isAr ? currentOffer.name.ar : currentOffer.name.en;
-                const price = currentOffer.discountPrice || currentOffer.price;
-                const currency = isAr ? 'ج.م' : 'EGP';
+                const priceLabel = isAr ? currentOffer.priceLabel.ar : currentOffer.priceLabel.en;
                 selectedBanner.innerHTML =
-                    `${isAr ? 'الباقة المختارة' : 'Selected Package'}:<b>${name} — ${price} ${currency}</b>`;
+                    `${isAr ? 'الباقة المختارة' : 'Selected Package'}:<b>${name} — ${priceLabel}</b>`;
             }
         }
 
