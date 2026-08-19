@@ -127,6 +127,31 @@
             letter-spacing: 0.2px;
             white-space: nowrap;
         }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-link {
+            position: relative;
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .nav-link:hover {
+            color: var(--text);
+            background: var(--glass-strong);
+        }
+        @media(max-width: 640px) {
+            .nav-links {
+                display: none;
+            }
+        }
         .nav-actions {
             display: flex;
             align-items: center;
@@ -230,16 +255,25 @@
             flex-shrink: 0;
         }
 
+        .profile-orbit-wrap {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
         .profile-wrap {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 176px;
+            height: 176px;
             border-radius: 50%;
-            margin-bottom: 22px;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
             -webkit-user-select: none;
+            z-index: 3;
         }
         .profile-glow {
             position: absolute;
@@ -271,6 +305,94 @@
             border: 2.5px solid rgba(255, 255, 255, 0.85);
             box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
             display: block;
+        }
+
+        /* ===== ORBITING LANGUAGE ICONS ===== */
+        .orbit-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px dashed var(--glass-border);
+            animation: orbitSpin 22s linear infinite;
+            z-index: 2;
+        }
+        .orbit-ring-1 {
+            width: 240px;
+            height: 240px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .orbit-ring-2 {
+            width: 208px;
+            height: 208px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 16s;
+            animation-direction: reverse;
+        }
+        @keyframes orbitSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .orbit-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 34px;
+            height: 34px;
+            margin: -17px;
+            border-radius: 50%;
+            background: var(--glass-strong);
+            border: 1px solid var(--glass-border-strong);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.30);
+            transform: rotate(var(--angle)) translateX(120px) rotate(calc(-1 * var(--angle)));
+            animation: counterSpin 22s linear infinite;
+        }
+        .orbit-ring-2 .orbit-icon {
+            transform: rotate(var(--angle)) translateX(104px) rotate(calc(-1 * var(--angle)));
+            animation-duration: 16s;
+            animation-direction: reverse;
+        }
+        @keyframes counterSpin {
+            from { transform: rotate(var(--angle)) translateX(120px) rotate(calc(-1 * var(--angle))); }
+            to { transform: rotate(calc(var(--angle) + 360deg)) translateX(120px) rotate(calc(-1 * var(--angle) - 360deg)); }
+        }
+        @media(max-width: 560px) {
+            .profile-orbit-wrap {
+                width: 190px;
+                height: 190px;
+            }
+            .profile-wrap {
+                width: 132px;
+                height: 132px;
+            }
+            .orbit-ring-1 {
+                width: 190px;
+                height: 190px;
+            }
+            .orbit-ring-2 {
+                width: 164px;
+                height: 164px;
+            }
+            .orbit-icon {
+                width: 28px;
+                height: 28px;
+                margin: -14px;
+                transform: rotate(var(--angle)) translateX(95px) rotate(calc(-1 * var(--angle)));
+            }
+            .orbit-ring-2 .orbit-icon {
+                transform: rotate(var(--angle)) translateX(82px) rotate(calc(-1 * var(--angle)));
+            }
+            .orbit-icon svg {
+                width: 16px !important;
+                height: 16px !important;
+            }
         }
 
         .hero-name {
@@ -969,6 +1091,35 @@
         }
         body.light-mode .sending-overlay {
             background: rgba(245, 247, 251, 0.9);
+        }
+        /* ===== SCROLL REVEAL (fly in from edges) ===== */
+        [data-reveal] {
+            opacity: 0;
+            will-change: transform, opacity;
+            transition: transform 0.8s cubic-bezier(.16, .84, .28, 1), opacity 0.8s ease;
+        }
+        [data-reveal="left"] {
+            transform: translateX(-90px);
+        }
+        [data-reveal="right"] {
+            transform: translateX(90px);
+        }
+        [data-reveal="up"] {
+            transform: translateY(60px);
+        }
+        [data-reveal="down"] {
+            transform: translateY(-60px);
+        }
+        [data-reveal].revealed {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+        @media(prefers-reduced-motion: reduce) {
+            [data-reveal] {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
         }
         @media(prefers-reduced-motion: reduce) {
             *,
