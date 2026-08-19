@@ -36,7 +36,7 @@
         // =================================================================
         //  RENDER OFFERS
         // =================================================================
-        let currentLang = 'ar';
+        let currentLang = 'en';
 
         function renderOffers(lang) {
             const wrap = document.getElementById('offersWrap');
@@ -113,22 +113,22 @@
 
             sendingOverlay.style.display = 'flex';
 
-            const isAr = currentLang === 'ar';
-            const offerName = isAr ? currentOffer.name.ar : currentOffer.name.en;
-            const priceLabel = isAr ? currentOffer.priceLabel.ar : currentOffer.priceLabel.en;
+            // Order messages are always sent in English, regardless of site language
+            const offerName = currentOffer.name.en;
+            const priceLabel = currentOffer.priceLabel.en;
 
-            const msg = `${isAr ? 'طلب موقع جديد 🌐' : 'New Website Request 🌐'}
+            const msg = `New Website Request 🌐
 
-        ${isAr ? 'الاسم' : 'Name'}: ${name}
-        ${isAr ? 'الهاتف' : 'Phone'}: ${phone}
-        ${isAr ? 'البريد' : 'Email'}: ${email || (isAr ? 'لم يحدد' : 'Not specified')}
-        ${isAr ? 'الباقة' : 'Package'}: ${offerName}
-        ${isAr ? 'السعر' : 'Price'}: ${priceLabel}
+        Name: ${name}
+        Phone: ${phone}
+        Email: ${email || 'Not specified'}
+        Package: ${offerName}
+        Price: ${priceLabel}
 
-        ${isAr ? 'تفاصيل إضافية' : 'Additional Details'}:
-        ${details || (isAr ? 'لا توجد' : 'None')}
+        Additional Details:
+        ${details || 'None'}
 
-        ${isAr ? 'تم الإرسال عبر موقع Mohamed Ashraf' : 'Sent via Mohamed Ashraf website'}`;
+        Sent via Mohamed Ashraf website`;
 
             const url = `https://wa.me/201550425843?text=${encodeURIComponent(msg)}`;
 
@@ -186,8 +186,8 @@
             'eyebrow': { ar: 'متاح حاليًا لاستقبال مشاريع جديدة', en: 'Currently available for new projects' },
             'name': { ar: 'Mohamed Ashraf', en: 'Mohamed Ashraf' },
             'tagline': {
-                ar: '<strong>مطور تطبيقات وويب</strong> بخبرة عملية في بناء مواقع ويب احترافية، تطبيقات أندرويد، وحلول مدمجة بالذكاء الاصطناعي. متمكّن من لغات البرمجة الأساسية ومستخدم بكفاءة عالية لأدوات الـ AI في تسريع التطوير وحل المشاكل التقنية المعقدة.',
-                en: '<strong>Web & App Developer</strong> with hands-on experience building professional websites, Android apps, and AI-integrated solutions. Proficient in core programming languages and skilled at leveraging AI tools to accelerate development and solve complex technical challenges.'
+                ar: '<strong>مطور ويب</strong> بخبرة عملية في بناء مواقع ويب احترافية، وحلول مدمجة بالذكاء الاصطناعي. متخصص في الـ Front-end ومعايا تيم Back-end، ومتمكّن من لغات البرمجة الأساسية ومستخدم بكفاءة عالية لأدوات الـ AI في تسريع التطوير وحل المشاكل التقنية المعقدة.',
+                en: '<strong>Web Developer</strong> with hands-on experience building professional websites and AI-integrated solutions. Focused on front-end development, backed by a dedicated back-end team. Proficient in core programming languages and skilled at leveraging AI tools to accelerate development and solve complex technical challenges.'
             },
             'stat-years': { ar: 'سنة خبرة برمجية', en: 'Years of coding experience' },
             'stat-fields': { ar: 'مجالات العمل', en: 'Work domains' },
@@ -218,9 +218,11 @@
             'modal-title': { ar: 'إكمال الطلب', en: 'Complete Order' },
             'modal-sub': { ar: 'ابعت بياناتك وهيتم التواصل معاك على واتساب', en: 'Send your details and we\'ll contact you on WhatsApp' },
             'label-name': { ar: 'الاسم الكامل', en: 'Full Name' },
+            'ph-name': { ar: 'اكتب اسمك بالكامل', en: 'Enter your full name' },
             'label-phone': { ar: 'رقم الهاتف', en: 'Phone Number' },
             'label-email': { ar: 'البريد الإلكتروني (اختياري)', en: 'Email (optional)' },
             'label-details': { ar: 'تفاصيل إضافية', en: 'Additional Details' },
+            'ph-details': { ar: 'اكتب أي تفاصيل عن الموقع اللي محتاجه...', en: 'Describe any details about the website you need...' },
             'send-btn': { ar: 'إرسال الطلب عبر واتساب', en: 'Send via WhatsApp' },
             'sending-title': { ar: 'جاري تحويل طلبك...', en: 'Redirecting your request...' },
             'sending-sub': { ar: 'هيتم فتح واتساب خلال لحظات', en: 'WhatsApp will open in a moment' },
@@ -337,8 +339,8 @@
         // =================================================================
         //  INIT
         // =================================================================
-        renderOffers('ar');
-        applyLanguage('ar');
+        renderOffers('en');
+        applyLanguage('en');
         initRevealObserver();
 
         console.log('✅ WhatsApp icon restored to original, all optimizations kept.');
