@@ -44,7 +44,7 @@
         function renderOffers(lang) {
             const wrap = document.getElementById('offersWrap');
             wrap.innerHTML = '';
-            offersData.forEach(o => {
+            offersData.forEach((o, idx) => {
                 const isAr = lang === 'ar';
                 const name = isAr ? o.name.ar : o.name.en;
                 const badge = o.badge ? (isAr ? o.badge.ar : o.badge.en) : null;
@@ -54,6 +54,7 @@
 
                 const el = document.createElement('div');
                 el.className = 'glass-card offer-card' + (badge ? ' featured' : '');
+                el.setAttribute('data-reveal', idx % 2 === 0 ? 'left' : 'right');
                 el.innerHTML = `
               ${badge ? `<span class="offer-badge">${badge}</span>` : ''}
               <div class="offer-name">${name}</div>
@@ -188,6 +189,8 @@
         // Translations
         const i18n = {
             'nav-name': { ar: 'محمد أشرف', en: 'Mohamed Ashraf' },
+            'nav-info': { ar: 'معلومات', en: 'Info' },
+            'nav-orders': { ar: 'الطلبات', en: 'Orders' },
             'eyebrow': { ar: 'متاح حاليًا لاستقبال مشاريع جديدة', en: 'Currently available for new projects' },
             'name': { ar: 'Mohamed Ashraf', en: 'Mohamed Ashraf' },
             'tagline': {
@@ -259,6 +262,12 @@
             });
 
             renderOffers(lang);
+            if (typeof initRevealObserver === 'function') {
+                // new offer cards need to be revealed immediately since they replace already-visible ones
+                requestAnimationFrame(() => {
+                    document.querySelectorAll('.offer-card[data-reveal]').forEach(el => el.classList.add('revealed'));
+                });
+            }
 
             if (currentOffer && modal.style.display === 'flex') {
                 const isAr = lang === 'ar';
@@ -314,9 +323,31 @@
         lightboxOverlay.addEventListener('click', e => { if (e.target === lightboxOverlay) closeLightbox(); });
 
         // =================================================================
+        //  SCROLL REVEAL (elements fly in from screen edges)
+        // =================================================================
+        let revealObserver = null;
+
+        function initRevealObserver() {
+            if (revealObserver) revealObserver.disconnect();
+            revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+            document.querySelectorAll('[data-reveal]:not(.revealed)').forEach(el => {
+                revealObserver.observe(el);
+            });
+        }
+
+        // =================================================================
         //  INIT
         // =================================================================
         renderOffers('ar');
         applyLanguage('ar');
+        initRevealObserver();
 
         console.log('✅ WhatsApp icon restored to original, all optimizations kept.');
