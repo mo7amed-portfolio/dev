@@ -91,14 +91,7 @@
         modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
         modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 
-        function waitForFirebase() {
-            return new Promise(resolve => {
-                if (window.FB) { resolve(window.FB); return; }
-                window.addEventListener('firebase-ready', () => resolve(window.FB), { once: true });
-            });
-        }
-
-        sendOrderBtn.addEventListener('click', async function() {
+        sendOrderBtn.addEventListener('click', function() {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const email = document.getElementById('custEmail').value.trim();
@@ -107,42 +100,32 @@
             if (!name) { alert(currentLang === 'ar' ? 'من فضلك اكتب اسمك' : 'Please enter your name'); return; }
             if (!phone) { alert(currentLang === 'ar' ? 'من فضلك اكتب رقم الهاتف' : 'Please enter your phone number'); return; }
 
-            sendOrderBtn.disabled = true;
             sendingOverlay.style.display = 'flex';
 
-            try {
-                const FB = await waitForFirebase();
-                const offerName = currentOffer.name.en;
-                const priceLabel = currentOffer.priceLabel.en;
+            const offerName = currentOffer.name.en;
+            const priceLabel = currentOffer.priceLabel.en;
 
-                const orderRef = await FB.addDoc(FB.collection(FB.db, 'orders'), {
-                    name,
-                    phone,
-                    email: email || null,
-                    details: details || null,
-                    packageName: offerName,
-                    priceLabel: priceLabel,
-                    status: 'new',
-                    createdAt: FB.serverTimestamp()
-                });
+            const msg = `New Website Request 🌐
 
-                await FB.addDoc(FB.collection(FB.db, 'orders', orderRef.id, 'messages'), {
-                    sender: 'system',
-                    text: `Order received: ${offerName} (${priceLabel})`,
-                    createdAt: FB.serverTimestamp()
-                });
+        Name: ${name}
+        Phone: ${phone}
+        Email: ${email || 'Not specified'}
+        Package: ${offerName}
+        Price: ${priceLabel}
 
-                setTimeout(() => {
-                    window.location.href = `chat-with-dev.html?order=${orderRef.id}`;
-                }, 1400);
-            } catch (err) {
-                console.error('Order save failed:', err);
+        Additional Details:
+        ${details || 'None'}
+
+        Sent via Mohamed Ashraf website`;
+
+            const url = `https://wa.me/201550425843?text=${encodeURIComponent(msg)}`;
+
+            setTimeout(() => {
                 sendingOverlay.style.display = 'none';
-                sendOrderBtn.disabled = false;
-                alert(currentLang === 'ar'
-                    ? 'حصل خطأ أثناء إرسال الطلب، حاول تاني'
-                    : 'Something went wrong while sending your order, please try again');
-            }
+                window.open(url, '_blank');
+                modal.style.display = 'none';
+                currentOffer = null;
+            }, 1600);
         });
 
         const themeToggle = document.getElementById('themeToggle');
@@ -222,8 +205,8 @@
             'label-details': { ar: 'تفاصيل إضافية', en: 'Additional Details' },
             'ph-details': { ar: 'اكتب أي تفاصيل عن الموقع اللي محتاجه...', en: 'Describe any details about the website you need...' },
             'send-btn': { ar: 'إرسال الطلب عبر واتساب', en: 'Send via WhatsApp' },
-            'sending-title': { ar: 'جاري تحويلك لصفحة الشات مع المطور...', en: 'Transferring you to the chat with the developer...' },
-            'sending-sub': { ar: 'لإتمام عملية الشراء', en: 'To complete your purchase' },
+            'sending-title': { ar: 'جاري تحويل طلبك...', en: 'Redirecting your request...' },
+            'sending-sub': { ar: 'هيتم فتح واتساب خلال لحظات', en: 'WhatsApp will open in a moment' },
             'footer-copy': { ar: '© 2026 جميع حقوق النشر محفوظة', en: '© 2026 All Rights Reserved' }
         };
 
