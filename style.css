@@ -433,9 +433,8 @@
                 min-width: 0;
                 justify-content: center;
                 align-items: center;
-                height: auto;
-                aspect-ratio: 4 / 5;
-                max-height: 380px;
+                height: 320px;
+                max-height: 42vh;
             }
             .profile-img-full {
                 width: 78%;
@@ -448,6 +447,15 @@
             }
             .floating-icons {
                 overflow: hidden;
+            }
+        }
+        @media(max-width: 900px) and (orientation: portrait) {
+            .hero-image-col {
+                height: 280px;
+                max-height: 36vh;
+            }
+            .profile-img-full {
+                max-width: 260px;
             }
         }
 
