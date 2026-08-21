@@ -1,6 +1,3 @@
-// =================================================================
-        //  OFFERS DATA
-        // =================================================================
         const offersData = [{
             id: 1,
             name: { ar: 'متجر إلكتروني', en: 'E-commerce Store' },
@@ -33,9 +30,6 @@
         const checkSvg =
             `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l5 5L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-        // =================================================================
-        //  RENDER OFFERS
-        // =================================================================
         let currentLang = 'en';
 
         function renderOffers(lang) {
@@ -64,7 +58,6 @@
             `;
                 wrap.appendChild(el);
             });
-            // re-bind events
             document.querySelectorAll('.offer-btn[data-id]').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     const id = parseInt(this.dataset.id);
@@ -74,9 +67,6 @@
             });
         }
 
-        // =================================================================
-        //  MODAL
-        // =================================================================
         const modal = document.getElementById('modal');
         const modalClose = document.getElementById('modalClose');
         const selectedBanner = document.getElementById('selectedBanner');
@@ -92,7 +82,6 @@
             selectedBanner.innerHTML =
                 `${isAr ? 'الباقة المختارة' : 'Selected Package'}:<b>${name} — ${priceLabel}</b>`;
             modal.style.display = 'flex';
-            // Reset fields
             document.getElementById('custName').value = '';
             document.getElementById('custPhone').value = '';
             document.getElementById('custEmail').value = '';
@@ -113,7 +102,6 @@
 
             sendingOverlay.style.display = 'flex';
 
-            // Order messages are always sent in English, regardless of site language
             const offerName = currentOffer.name.en;
             const priceLabel = currentOffer.priceLabel.en;
 
@@ -140,9 +128,6 @@
             }, 1600);
         });
 
-        // =================================================================
-        //  THEME TOGGLE (Dark / Light)
-        // =================================================================
         const themeToggle = document.getElementById('themeToggle');
 
         function applyTheme(theme) {
@@ -172,13 +157,9 @@
 
         initTheme();
 
-        // =================================================================
-        //  LANGUAGE TOGGLE
-        // =================================================================
         const langToggle = document.getElementById('langToggle');
         const langLabel = document.getElementById('langLabel');
 
-        // Translations
         const i18n = {
             'nav-name': { ar: 'محمد أشرف', en: 'Mohamed Ashraf' },
             'nav-info': { ar: 'معلومات', en: 'Info' },
@@ -257,7 +238,6 @@
 
             renderOffers(lang);
             if (typeof initRevealObserver === 'function') {
-                // new offer cards need to be revealed immediately since they replace already-visible ones
                 requestAnimationFrame(() => {
                     document.querySelectorAll('.offer-card[data-reveal]').forEach(el => el.classList.add('revealed'));
                 });
@@ -277,9 +257,6 @@
             applyLanguage(nextLang);
         });
 
-        // =================================================================
-        //  LIGHTBOX (long press)
-        // =================================================================
         const profileWrap = document.getElementById('profileWrap');
         const lightboxOverlay = document.getElementById('lightboxOverlay');
         const lightboxClose = document.getElementById('lightboxClose');
@@ -315,9 +292,6 @@
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxOverlay.addEventListener('click', e => { if (e.target === lightboxOverlay) closeLightbox(); });
 
-        // =================================================================
-        //  SCROLL REVEAL (elements fly in from screen edges)
-        // =================================================================
         let revealObserver = null;
 
         function initRevealObserver() {
@@ -336,9 +310,6 @@
             });
         }
 
-        // =================================================================
-        //  INIT
-        // =================================================================
         renderOffers('en');
         applyLanguage('en');
         initRevealObserver();
